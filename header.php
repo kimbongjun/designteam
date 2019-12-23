@@ -11,7 +11,7 @@
 
 ?>
 <!doctype html>
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?> class="<?php echo (is_front_page() ? 'mainpage' : '');?>">
 
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
@@ -22,6 +22,7 @@
 </head>
 
 <body <?php body_class(); ?>>
+	<header class="site-header">
 	<h1 id="logo">
 		<a href="<?php echo home_url('/')?>">
 	
@@ -64,9 +65,6 @@
 		</div>
 		</a>
 	</div>
-	<!-- <div id="global_popup_overlay" class="global_popup_overlay"></div>
-    <div id="global_popup_cover" class="global_popup_cover"></div>
-    <div id="global_popup_dim" class="global_popup_dim"></div> -->
 	<div id="global_menu_outer">
 		<div class="global_menu_inner">
 			<!-- <div class="global_menu_cursor"><i></i><span class="sr-only">닫기</span></div> -->
@@ -83,3 +81,8 @@
 			</nav>
 		</div>
 	</div>
+	</header>
+	
+	<!-- <div id="global_popup_overlay" class="global_popup_overlay"></div>
+    <div id="global_popup_cover" class="global_popup_cover"></div>
+    <div id="global_popup_dim" class="global_popup_dim"></div> -->	

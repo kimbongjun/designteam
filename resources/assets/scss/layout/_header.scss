@@ -1,3 +1,40 @@
+.site-header {
+  &.on-scroll {
+    #logo {
+
+      path,
+      rect {
+        stroke: $black;
+      }
+    }
+
+    #global_menu_outer {
+      a {
+        // background: -webkit-linear-gradient(135deg, #2efdc7, #d71414, #146ed7);
+        // -webkit-background-clip: text;
+        // -webkit-text-fill-color: transparent;
+        // background-size: 600% 600%;
+        // animation: AnimationName 7s ease infinite;
+        color: $black;
+      }
+
+      @keyframes AnimationName {
+        0% {
+          background-position: 0% 43%
+        }
+
+        50% {
+          background-position: 100% 58%
+        }
+
+        100% {
+          background-position: 0% 43%
+        }
+      }
+    }
+  }
+}
+
 #logo {
   width: 100px;
   height: 100px;
@@ -7,10 +44,13 @@
   -webkit-transition: top 300ms;
   transition: top 300ms;
   z-index: 500;
-  //mix-blend-mode: difference;
 
   @include respond-max(md) {
+    width: 80px;
+    height: 80px;
+    top: 10px;
     left: 2rem;
+    mix-blend-mode: difference;
   }
 
   a {
@@ -19,14 +59,25 @@
     height: 100%;
     padding: 10px;
 
+    @include respond-max(sm) {
+      padding: 0;
+    }
+
     svg,
     img {
       display: block;
       width: 100%;
       height: 100%;
     }
+
+    path,
+    rect {
+      transition: all 1s;
+    }
   }
 }
+
+
 
 #global_menu_outer {
   position: fixed;
@@ -44,6 +95,10 @@
   }
 
   .global_menu_nav {
+    @include respond-min(sm) {
+      display: block !important;
+    }
+
     @include respond-max(sm) {
       display: none;
     }
@@ -56,6 +111,7 @@
 
           @include respond-max(sm) {
             display: block;
+            opacity: 0;
           }
 
           a {
@@ -63,6 +119,8 @@
             font-size: 2rem;
             padding: 0 1rem;
             color: $white;
+            transition: all 1s;
+
 
             @include respond-max(sm) {
               font-size: 3rem;
@@ -89,6 +147,10 @@
   transition: top 300ms;
   z-index: 99999;
   mix-blend-mode: difference;
+
+  @include respond-max(sm) {
+    top: 25px;
+  }
 
   .global_menu_btn {
     display: block;

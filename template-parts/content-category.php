@@ -35,7 +35,7 @@
 					while ( $the_query->have_posts() ) : $the_query->the_post();
 					$thumbnail = get_the_post_thumbnail( $post->ID, 'full' );
                     echo '<li>';
-                        echo '<a href='.get_permalink().' style="border: 1px solid #ddd;">';
+                        echo '<a href='.get_permalink().'>';
 						echo '<figure class="post_thumbnail">';
 						if($thumbnail):
 						echo get_the_post_thumbnail( $post->ID, 'full' );

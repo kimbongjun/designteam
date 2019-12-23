@@ -20,6 +20,8 @@ html.gnb-open {
 #transition_container {
     opacity: 0;
     visibility: hidden;
+    position: relative;
+    z-index: 1000;
 }
 
 .transition_mask {
@@ -28,9 +30,7 @@ html.gnb-open {
     width: 100vw;
     height: 100vh;
     left: 0;
-    right: 0;
-    bottom: 0;
-    top: inherit;
+    top: 0;
     background-image: -webkit-gradient(linear,
             left top,
             right top,

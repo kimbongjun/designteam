@@ -46,7 +46,11 @@ gulp.task("images", function () {
 
 gulp.task("libs", function () {
     return gulp
-        .src([src + '/js/libs/*.js'])
+        .src([
+            src + '/js/libs/gsap/*.js',
+            src + '/js/libs/scrollmagic/*.js',
+            src + '/js/libs/etc/*.js',
+        ])
         .pipe(uglify())
         .pipe(concat("vendor_bundle.js"))
         .pipe(gulp.dest(dist));
