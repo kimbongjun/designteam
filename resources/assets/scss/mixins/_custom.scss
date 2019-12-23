@@ -1,0 +1,196 @@
+/* **************************************** *
+ * Media Query
+ * **************************************** */
+$screen-xs: 480px;
+$screen-sm: 800px;
+$screen-md: 1100px;
+$screen-lg: 1600px;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max: ($screen-xs + 1);
+$screen-sm-max: ($screen-sm + 1);
+$screen-md-max: ($screen-md + 1);
+
+@mixin respond-min($media) {
+  @if $media==xs {
+    @media (min-width: $screen-xs-max) {
+      @content;
+    }
+  }
+
+  @else if $media==sm {
+    @media (min-width: $screen-sm-max) {
+      @content;
+    }
+  }
+
+  @else if $media==md {
+    @media (min-width: $screen-md-max) {
+      @content;
+    }
+  }
+
+  @else if $media==lg {
+    @media (min-width: $screen-lg) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-max($media) {
+  @if $media==xs {
+    @media (max-width: $screen-xs) {
+      @content;
+    }
+  }
+
+  @else if $media==sm {
+    @media (max-width: $screen-sm) {
+      @content;
+    }
+  }
+
+  @else if $media==md {
+    @media (max-width: $screen-md) {
+      @content;
+    }
+  }
+
+  @else if $media==lg {
+    @media (max-width: $screen-lg) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-custom-max($custom) {
+  @media (max-width: $custom) {
+    @content;
+  }
+}
+
+@mixin respond-custom-min($custom) {
+  @media (min-width: $custom) {
+    @content;
+  }
+}
+
+@mixin respond-custom-max-height($custom) {
+  @media (max-height: $custom) {
+    @content;
+  }
+}
+
+@mixin respond-custom-min-height($custom) {
+  @media (min-height: $custom) {
+    @content;
+  }
+}
+
+/* **************************************** *
+ * Placeholder
+ * **************************************** */
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+
+  &:-moz-placeholder {
+    @content;
+  }
+
+  &::-moz-placeholder {
+    @content;
+  }
+
+  &:-ms-input-placeholder {
+    @content;
+  }
+}
+
+/* **************************************** *
+ * Graident
+ * **************************************** */
+
+@mixin linear-gradient($direction, $color-stops...) {
+
+  // Direction has been omitted and happens to be a color-stop
+  @if is-direction($direction)==false {
+    $color-stops: $direction, $color-stops;
+    $direction: 180deg;
+  }
+
+  background-image: nth(nth($color-stops, 1), 1);
+  background-image: -webkit-linear-gradient(legacy-direction($direction),
+    $color-stops);
+  background-image: linear-gradient($direction, $color-stops);
+}
+
+@function is-direction($value) {
+  $is-keyword: index((to top,
+        to top right,
+        to right top,
+        to right,
+        to bottom right,
+        to right bottom,
+        to bottom,
+        to bottom left,
+        to left bottom,
+        to left,
+        to left top,
+        to top left),
+      $value);
+  $is-angle: type-of($value)=="number"and index("deg""grad""turn""rad", unit($value));
+
+  @return $is-keyword or $is-angle;
+}
+
+@function legacy-direction($value) {
+  @if is-direction($value)==false {
+    @error "Cannot convert `#{$value}` to legacy syntax because it doesn't seem to be a direction.";
+  }
+
+  $conversion-map: (to top: bottom,
+    to top right: bottom left,
+    to right top: left bottom,
+    to right: left,
+    to bottom right: top left,
+    to right bottom: left top,
+    to bottom: top,
+    to bottom left: top right,
+    to left bottom: right top,
+    to left: right,
+    to left top: right bottom,
+    to top left: bottom right);
+
+  @if map-has-key($conversion-map, $value) {
+    @return map-get($conversion-map, $value);
+  }
+
+  @return 90deg - $value;
+}
+
+@function headings($from: 1, $to: 6) {
+  @if $from==$to {
+    @return "h#{$from}";
+  }
+
+  @else {
+    @return "h#{$from},"+headings($from + 1, $to);
+  }
+}
+
+#{headings(1,6)} {
+  margin: 0;
+}
+
+@mixin set-locale($language) {
+  $supported-languages: 'en', 'vi', 'ph', 'ko';
+  $language: to-lower-case($language);
+
+  @if not index($supported-languages, $language) {
+    @error "Language `#{$language}` is not supported. Pull request welcome!";
+  }
+
+  $language: $language !global;
+}

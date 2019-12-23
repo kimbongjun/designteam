@@ -1,0 +1,36 @@
+.post-wrap {
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -1rem;
+
+        li {
+            flex: 0 0 33%;
+            padding: 1rem;
+
+            a {
+                display: block;
+
+                .post_thumbnail {
+                    position: relative;
+                    padding-top: 100%;
+                    overflow: hidden;
+
+                    img {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        max-width: 100%;
+                        height: auto;
+                    }
+                }
+
+                h4 {
+                    font-size: 1.25rem;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,130 @@
+.btn,
+.button {
+  &:hover {
+    cursor: pointer;
+  }
+
+  display: inline-block;
+  background-color: transparent;
+  border: 0;
+  padding: 10px 15px;
+  min-width: 70px;
+  font-family: $global-font-family;
+
+  .owra-modal & {
+    min-width: 140px;
+    padding: 10px 0;
+  }
+
+  font-weight: 500;
+  font-size: 0.9375rem;
+
+  &.btn-primary {
+    background-color: $color-primary;
+    color: #fff;
+  }
+
+  &.btn-black {
+    background-color: $color-black;
+    color: #fff;
+  }
+
+  &.btn-secondary {
+    background-color: $color-secondary;
+    color: #fff;
+  }
+
+  &.btn-third {
+    background-color: #f1f1f1;
+    color: #666666;
+  }
+
+  @include respond-max(sm) {
+    min-width: 80px;
+  }
+
+  @include respond-max(xs) {
+    min-width: 80px;
+  }
+}
+
+.btn-inline-wrap {
+  font-size: 0;
+
+  a {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+
+      @include respond-max(md) {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.btn-wrap {
+  width: 100%;
+  text-align: center;
+
+  .btn {
+    display: inline-block;
+    vertical-align: middle;
+    //min-width: 140px;
+    text-align: center;
+  }
+}
+
+/* Hola Pro 공통 버튼 */
+a.btn-more {
+  display: inline-block;
+  position: relative;
+  background-color: $color-primary;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 100;
+  padding: 14px 30px;
+  color: #fff;
+  transition: all 1s;
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+
+  @include respond-max(sm) {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+a.btn-more:hover {
+  color: #fff;
+}
+
+a.btn-more:after {
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  vertical-align: text-bottom;
+  font-family: "icomoon";
+  font-size: 15px;
+  line-height: 22px;
+  color: #fff;
+  content: "\f105";
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  margin-left: 10px;
+
+  @include respond-max(sm) {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+}

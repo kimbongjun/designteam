@@ -1,0 +1,174 @@
+// form 요소 공통
+input,
+select,
+textarea {
+  min-height: 40px;
+  font-weight: 500;
+  font-size: 15px;
+  color: #666666;
+  padding: 10px 15px;
+  @include respond-max(sm) {
+    font-size: 14px;
+  }
+  @include respond-max(xs) {
+    font-size: 13px;
+  }
+}
+input[type="checkbox"] {
+  min-height: 0;
+}
+input[type="button"],
+button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+.custom-chk {
+  display: block;
+  position: relative;
+  padding-left: 2rem;
+  font-size: 0.9375rem;
+  color: #595757;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    &:checked ~ .checkmark {
+      background-color: $color-primary;
+      border: 0;
+      &:after {
+        display: block;
+      }
+    }
+  }
+  .checkmark {
+    position: absolute;
+    top: 50%;
+    margin-top: -12.5px;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #fff;
+    border: 1px solid #707070;
+    transition: all 0.35s;
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 9px;
+      top: 5px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    @include respond-max(sm) {
+      width: 18px;
+      height: 18px;
+      margin-top: -9px;
+    }
+  }
+}
+
+/* 설명회 관련 모달 등 */
+.owra-modal {
+  .contact_h3 {
+    text-align: center;
+    font-weight: 500;
+    font-size: 2rem;
+    color: #000000;
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+  }
+  ul {
+    margin-bottom: 1.25rem;
+    li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      p {
+        display: none;
+      }
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+      label {
+        width: 100px;
+        & + .modal-col {
+          width: calc(100% - 100px);
+          input {
+            font-size: 15px;
+            line-height: 1;
+            width: 100%;
+            border: 1px solid #e1e1e1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+          }
+          .modal-input-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -2px;
+            margin-right: -2px;
+            span {
+              flex: 1;
+              padding: 0 2px;
+              &.m_number {
+                width: calc(100% - 115.5px);
+              }
+              &.m_confirm {
+                width: 115.5px;
+                max-width: 115.5px;
+              }
+            }
+            .p_btn {
+              padding: 10px 5px;
+              font-weight: 500;
+              font-size: 15px;
+              line-height: 1;
+              color: #333333;
+              border: 1px solid #e1e1e1;
+              background-color: transparent;
+              max-width: 111px;
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+  .agree_wrap {
+    label {
+      input,
+      span {
+        display: inline-block;
+        vertical-align: middle;
+        min-height: 0;
+      }
+    }
+  }
+  .agree_con {
+    margin-bottom: 20px;
+    padding: 1rem;
+    background-color: #fafafa;
+    font-weight: 200;
+    font-size: 14px;
+    color: #666666;
+    border: 1px solid #dddddd;
+  }
+  .modal-submit {
+    text-align: center;
+  }
+}
+
+.ajax-loader {
+  display: none;
+}

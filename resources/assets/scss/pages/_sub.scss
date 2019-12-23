@@ -1,0 +1,59 @@
+.site-page {
+    .sub_header {
+        background: #9a0000;
+        background: -moz-linear-gradient(left, #9a0000 0%, #9a0000 100%);
+        background: -webkit-linear-gradient(left, #9a0000 0%, #9a0000 100%);
+        background: linear-gradient(to right, #9a0000 0%, #9a0000 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9a0000', endColorstr='#9a0000', GradientType=1);
+
+        header {
+            display: table;
+            width: 100%;
+            min-height: 18.75rem;
+
+            h2 {
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center;
+                font-size: 4rem;
+                color: $white;
+            }
+        }
+    }
+
+    .sub_contents {
+        padding: 5rem 0;
+
+        // gallery
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -1rem;
+
+            .grid-sizer,
+            .grid-item {
+                @include respond-max(md) {
+                    width: 50%;
+                }
+
+                @include respond-max(sm) {
+                    width: 100%;
+                }
+
+                width: 33.333%;
+            }
+
+            div.grid-item {
+                a {
+                    display: block;
+                    padding: 1rem;
+
+                    img {
+                        max-width: 100%;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
