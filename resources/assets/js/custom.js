@@ -122,13 +122,52 @@ window.udtt = ((udtt, $, undefined) => {
         }
       },
       svg() {
-        document.getElementsByTagName("body")[0].style.cursor = "url('/wp-content/themes/designteam/resources/assets/imgs/finger2.cur'), auto";
+        if (!$("html").hasClass("mobile")) {
+          let svg = $('#udtt_svg');
+          let pathes = svg.find('.cls-1');
+          let onColor = "#ff0";
+          let offColor = "#fff";
+          pathes.each(function (i, path) {
+            // 1번 부분
 
-        var path = $("path.cls-1");
-        TweenMax.to(path, 0.1, {
-          strokeDashoffset: 0,
-        })
+            var total_length = path.getTotalLength();
+            // 2번 부분
+            path.style.strokeDasharray = total_length + " " + total_length;
+            // 3번 부분
+            path.style.strokeDashoffset = total_length;
+            // 4번 부분
+            TweenMax.to($(path), 1, {
+              strokeDashoffset: "0",
+              onComplete: function () {
+                let onoffColor = color => {
+                  let pathes = svg.find('.cls-1');
+                  pathes.each(function (i, path) {
+                    // 1번 부분            
+                    var total_length = path.getTotalLength();
 
+                    // 2번 부분
+                    path.style.strokeDasharray = total_length + " " + total_length;
+                    // 3번 부분
+                    path.style.strokeDashoffset = total_length;
+                    // 4번 부분
+                    TweenMax.to($(path), 1, {
+                      strokeDashoffset: "0",
+                      autoRound: false,
+                      ease: Linear.easeNone,
+                      stroke: color
+                    }, 5.5);
+                  });
+                }
+                svg.on("mouseenter", function () {
+                  onoffColor(onColor);
+                });
+                svg.on("mouseleave", function () {
+                  onoffColor(offColor)
+                });
+              }
+            }, 5.5);
+          });
+        }
       },
       video() {
         if ($("html").hasClass("mainpage")) {

@@ -1,5 +1,14 @@
 <?php
-
+function artboard(){
+    ob_start();
+    ?>
+  
+    
+    <?php
+    $output = ob_get_clean();
+    return $output;
+}
+add_shortcode('artboard', 'artboard');
 function udtt_gallery(){
         ob_start();
         ?>

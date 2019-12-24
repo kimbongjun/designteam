@@ -4,7 +4,7 @@
     path,
     rect {
       stroke: $white;
-      stroke-width: 7px;
+      //stroke-width: 1px;
     }
   }
 
@@ -82,7 +82,7 @@
 
     path,
     rect {
-      transition: all 1s;
+      stroke-width: 2px;
     }
   }
 }
