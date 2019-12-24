@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /node_module
 resources/node_modules/ext/package.json
 resources/node_modules/ext/node_modules/type/test/lib/is-to-string-tag-supported.js
@@ -4998,3 +4999,6 @@ resources/node_modules/object.getownpropertydescriptors/.editorconfig
 resources/node_modules/object.getownpropertydescriptors/.eslintrc
 resources/node_modules/object.getownpropertydescriptors/.travis.yml
 resources/node_modules/object.getownpropertydescriptors/.github/workflows/rebase.yml
+=======
+node_modules/
+>>>>>>> b57b8019ccac2a4a9f506ec5d102a86bac0f2aa3

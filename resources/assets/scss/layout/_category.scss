@@ -1,0 +1,52 @@
+.post-wrap {
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -1rem;
+
+        @include respond-max(sm) {
+            margin: -10px;
+        }
+
+        li {
+            width: 33.33%;
+
+            @include respond-max(sm) {
+                width: 50%;
+            }
+
+            a {
+                display: block;
+                padding: 1rem;
+
+                @include respond-max(sm) {
+                    padding: 10px;
+                }
+
+                .post_thumbnail {
+                    position: relative;
+                    padding-top: 100%;
+                    overflow: hidden;
+
+                    img {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        max-width: 100%;
+                        height: auto;
+                    }
+
+                    figcaption {
+                        background-color: $white;
+                    }
+                }
+
+                h4 {
+                    font-size: 1.25rem;
+                }
+            }
+        }
+    }
+}

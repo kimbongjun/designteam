@@ -40,12 +40,25 @@
 						if($thumbnail):
 						echo get_the_post_thumbnail( $post->ID, 'full' );
 						else:
+<<<<<<< HEAD
 						//echo '<img src="'.get_template_directory_uri().'/resources/dist/imgs/placehold.png"></figure>';
 						endif;
 						echo '</figure>';                        
 						echo '<h4 class="post_desc">';
 							echo get_the_title();                            
 						echo '</h4>';
+=======
+						echo '<img src="//placekitten.com/600/600">';
+						endif;
+						echo '<figcaption style="padding: 1rem;">';
+						echo '<h4 class="post_desc" style="margin: 0 0 0.5rem;line-height: 1;">';
+						echo get_the_title();                            
+						echo '</h4>';
+						$user_id = get_the_author_meta( 'ID' );
+						echo '<p style="margin: 0;">지은이 : '.get_the_author_meta( 'display_name').'</p>';
+						echo '</figcaption>';
+						echo '</figure>';                        
+>>>>>>> b57b8019ccac2a4a9f506ec5d102a86bac0f2aa3
                         echo '</a>';
                     echo '</li>';
 					endwhile;																															

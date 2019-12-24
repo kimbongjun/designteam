@@ -1,0 +1,187 @@
+.site-header {
+  &.on-scroll {
+    #logo {
+
+      path,
+      rect {
+        stroke: $black;
+      }
+    }
+
+    #global_menu_outer {
+      a {
+        // background: -webkit-linear-gradient(135deg, #2efdc7, #d71414, #146ed7);
+        // -webkit-background-clip: text;
+        // -webkit-text-fill-color: transparent;
+        // background-size: 600% 600%;
+        // animation: AnimationName 7s ease infinite;
+        color: $black;
+      }
+
+      @keyframes AnimationName {
+        0% {
+          background-position: 0% 43%
+        }
+
+        50% {
+          background-position: 100% 58%
+        }
+
+        100% {
+          background-position: 0% 43%
+        }
+      }
+    }
+  }
+}
+
+#logo {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  left: 5rem;
+  top: 25.5px;
+  -webkit-transition: top 300ms;
+  transition: top 300ms;
+  z-index: 500;
+
+  @include respond-max(md) {
+    width: 80px;
+    height: 80px;
+    top: 10px;
+    left: 2rem;
+    mix-blend-mode: difference;
+  }
+
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+
+    @include respond-max(sm) {
+      padding: 0;
+    }
+
+    svg,
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    path,
+    rect {
+      transition: all 1s;
+    }
+  }
+}
+
+
+
+#global_menu_outer {
+  position: fixed;
+  z-index: 100;
+  top: 49px;
+  right: 5rem;
+
+  @include respond-max(sm) {
+    z-index: 99999;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin: auto;
+    transform: translateY(-50%);
+  }
+
+  .global_menu_nav {
+    @include respond-min(sm) {
+      display: block !important;
+    }
+
+    @include respond-max(sm) {
+      display: none;
+    }
+
+    div {
+      ul {
+        li {
+          display: inline-block;
+          vertical-align: middle;
+
+          @include respond-max(sm) {
+            display: block;
+            opacity: 0;
+          }
+
+          a {
+            display: block;
+            font-size: 2rem;
+            padding: 0 1rem;
+            color: $white;
+            transition: all 1s;
+
+
+            @include respond-max(sm) {
+              font-size: 3rem;
+              padding: 0.5rem 0;
+              text-align: center;
+              color: $black;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#global_menu_btn_wrap {
+  @include respond-min(sm) {
+    display: none;
+  }
+
+  position: fixed;
+  top: 49px;
+  right: 2rem;
+  -webkit-transition: top 300ms;
+  transition: top 300ms;
+  z-index: 99999;
+  mix-blend-mode: difference;
+
+  @include respond-max(sm) {
+    top: 25px;
+  }
+
+  .global_menu_btn {
+    display: block;
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+
+    .global_menu_btn_inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      .global_menu_btn_line {
+        width: 100%;
+        height: 4px;
+        position: absolute;
+        left: 0;
+        background: #ed9cbc;
+
+        &.global_menu_btn_line_01 {
+          top: 0;
+        }
+
+        &.global_menu_btn_line_02 {
+          top: 13px;
+        }
+
+        &.global_menu_btn_line_03 {
+          bottom: 0;
+        }
+      }
+    }
+  }
+}

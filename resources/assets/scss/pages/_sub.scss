@@ -1,0 +1,93 @@
+.site-page {
+    .sub_header {
+        background: #9a0000;
+        background: -moz-linear-gradient(left, #9a0000 0%, #9a0000 100%);
+        background: -webkit-linear-gradient(left, #9a0000 0%, #9a0000 100%);
+        background: linear-gradient(to right, #9a0000 0%, #9a0000 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9a0000', endColorstr='#9a0000', GradientType=1);
+
+        header {
+            display: table;
+            width: 100%;
+            min-height: 18.75rem;
+
+            h2 {
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center;
+                font-size: 4rem;
+                color: $white;
+            }
+        }
+    }
+
+    .sub_contents {
+        padding: 5rem 0;
+        background-color: #ededed;
+
+        @include respond-max(sm) {
+            padding: 20px 0;
+        }
+
+        // gallery
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -1rem;
+
+            @include respond-max(sm) {
+                margin: -10px;
+            }
+
+            .grid-sizer,
+            .grid-item {
+                @include respond-max(md) {
+                    width: 50%;
+                }
+
+                width: 33.333%;
+            }
+
+            div.grid-item {
+                a {
+                    display: block;
+                    opacity: 0;
+                    visibility: hidden;
+                    position: relative;
+                    padding: 1rem;
+
+                    @include respond-max(sm) {
+                        padding: 10px;
+                    }
+
+                    figure {
+                        overflow: hidden;
+
+                        img {
+                            max-width: 100%;
+                            width: 100%;
+                            transition: all 0.5s ease-in-out;
+                        }
+                    }
+
+                    .description {
+                        padding: 1.25rem 0.9375rem;
+                        background-color: $white;
+
+                        p {
+                            margin: 0;
+                        }
+                    }
+
+                    &:hover {
+                        figure {
+                            img {
+                                transform: scale3d(1.1, 1.1, 1.1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
