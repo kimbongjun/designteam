@@ -106,6 +106,7 @@ window.udtt = ((udtt, $, undefined) => {
         this.resize();
         this.gallery();
         this.video();
+        this.svg();
       },
       resize() {
         $(window).on("load resize", function () {
@@ -119,6 +120,15 @@ window.udtt = ((udtt, $, undefined) => {
         } else {
           return $(window).innerWidth <= max_width;
         }
+      },
+      svg() {
+        document.getElementsByTagName("body")[0].style.cursor = "url('/wp-content/themes/designteam/resources/assets/imgs/finger2.cur'), auto";
+
+        var path = $("path.cls-1");
+        TweenMax.to(path, 0.1, {
+          strokeDashoffset: 0,
+        })
+
       },
       video() {
         if ($("html").hasClass("mainpage")) {
@@ -189,7 +199,9 @@ window.udtt = ((udtt, $, undefined) => {
             }
           });
         });
-
+        $(".video_fullscreen").on("click", function (e) {
+          e.preventDefault();
+        });
         // $grid.imagesLoaded().always(function () {
         //   $grid.isotope('layout');
         // });

@@ -46,7 +46,7 @@ class Description_Walker extends Walker_Nav_Menu
         $title = apply_filters( 'the_title', $item->title, $item->ID );
 				
         $item_output = $args->before			
-            . "<a href=".$item->url." class='main-menu-link'>"
+            . "<a href=".$item->url." class='main-menu-link' data-hover=".$title.">"
             . $args->link_before
             . '<span class="menu-title">'.$title.'</span>'
             . '</a> '

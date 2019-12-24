@@ -76,3 +76,11 @@ html.gnb-open {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+/* URL, 대체용 키워드 */
+a,
+button,
+input,
+textarea {
+    cursor: url(../assets/imgs/finger.cur), pointer;
+}

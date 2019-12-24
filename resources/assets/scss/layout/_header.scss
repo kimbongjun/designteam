@@ -1,4 +1,14 @@
 .site-header {
+  #logo {
+
+    path,
+    rect {
+      stroke: $white;
+      stroke-width: 7px;
+    }
+  }
+
+
   &.on-scroll {
     #logo {
 
@@ -114,12 +124,23 @@
             opacity: 0;
           }
 
+          &.current-menu-item {
+            a {
+              color: $hover-color;
+            }
+          }
+
           a {
             display: block;
             font-size: 2rem;
             padding: 0 1rem;
             color: $white;
-            transition: all 1s;
+            transition: all 0.5s;
+            position: relative;
+
+            // &:before {
+            //   content: attr(data-hover);
+            // }
 
 
             @include respond-max(sm) {
@@ -127,6 +148,29 @@
               padding: 0.5rem 0;
               text-align: center;
               color: $black;
+            }
+          }
+
+          &:not(.current-menu-item) {
+            a {
+              @include respond-min(sm) {
+                &:hover {
+                  &:after {
+                    width: 100%;
+                  }
+                }
+
+                &:after {
+                  content: attr(data-hover);
+                  position: absolute;
+                  color: $hover-color;
+                  left: 1rem;
+                  width: 0;
+                  transition: all 0.5s ease-in;
+                  overflow: hidden;
+                  white-space: nowrap;
+                }
+              }
             }
           }
         }
