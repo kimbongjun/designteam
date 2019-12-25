@@ -9,48 +9,7 @@ get_header();
 				<div id="overlay"></div>							
 				</video>
 			</div>					
-			<!-- <div class="tree-wrap">			
-				<ul class="tree">
-					<li class="shine">🌟</li>
-					<ul class="">
-						<li>🌲</li>
-						<li>🎄</li>
-						<ul>
-							<li>🎄</li>
-							<li>🌲</li>
-							<li>🌲</li>
-							<ul>
-								<li>🌲</li>
-								<li>🌲</li>
-								<li>🎄</li>
-								<li>🌲</li>
-								<ul>
-									<li>🎄</li>
-									<li>🌲</li>
-									<li>🎄</li>
-									<li>🌲</li>
-									<li>🎄</li>
-									<ul>
-										<li>🌲</li>
-										<li>🎄</li>
-										<li>🎄</li>
-										<li>🌲</li>
-										<li>🎄</li>
-										<li>🌲</li>
-									</ul>
-									</li>
-								</ul>
-								</li>
-							</ul>
-							</li>
-						</ul>
-						</li>
-					</ul>
-				</ul>
-				<ul>
-					<li class="trunk">🔶</li>
-				</ul>
-			</div> -->
+			
 		</section>											
 	</main><!-- #main -->       
 <?php

@@ -78,9 +78,22 @@ html.gnb-open {
 }
 
 /* URL, 대체용 키워드 */
+html.desktop {
+    body {
+        //   cursor: url(../assets/imgs/finger2.cur), pointer;
+    }
+}
+
+
 a,
 button,
 input,
+input[type="checkbox"],
+#hamburger,
 textarea {
     cursor: url(../assets/imgs/finger.cur), pointer;
+}
+
+input[type=password] {
+    font-family: initial;
 }

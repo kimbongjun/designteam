@@ -54,9 +54,9 @@
 		</a>	
 	</h1>
 	<div id="global_menu_btn_wrap">
-		<a id="global_menu_btn" class="global_menu_btn custom_hover custom_simple_cursor" href="#">
-		<span class="sr-only">메뉴 열기</span>
-		<div class="global_menu_btn_inner">
+		<input type="checkbox" id="hamburger" class="toggleBtn" />
+		<a id="global_menu_btn" class="global_menu_btn custom_hover custom_simple_cursor" href="#">		
+		<div class="global_menu_btn_inner">			
 			<span class="global_menu_btn_line global_menu_btn_line_01"></span>
 			<span class="global_menu_btn_line global_menu_btn_line_02"></span>
 			<span class="global_menu_btn_line global_menu_btn_line_03"></span>

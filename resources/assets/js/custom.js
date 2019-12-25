@@ -9,6 +9,7 @@ window.udtt = ((udtt, $, undefined) => {
   document.addEventListener("DOMContentLoaded", () => {
     Util.init();
     UI.init();
+    $(window).trigger('resize');
   });
   const Util = (udtt.Util = {
       init() {
@@ -25,7 +26,7 @@ window.udtt = ((udtt, $, undefined) => {
           h: window.innerHeight ||
             document.documentElement.clientHeight ||
             document.body.clientHeight,
-          hamburger: document.querySelector("#global_menu_btn"),
+          hamburger: document.querySelector("#hamburger"),
           header: document.querySelector(".site-header"),
           $slider: $(".visual-slider"),
           modalBtn: document.querySelectorAll(".modal-btn")
@@ -85,9 +86,9 @@ window.udtt = ((udtt, $, undefined) => {
         let isMobile;
         let getView = {
           mobFunc: function () {
-            if ($(".site-navigation").css("display") == "none") {
+            if ($(".global_menu_btn_wrap").css("display") == "none") {
               isMobile = "mobile";
-            } else if ($(".site-navigation").css("display") == "block") {
+            } else if ($(".global_menu_btn_wrap").css("display") == "block") {
               isMobile = "pc";
             }
             return isMobile;
@@ -107,10 +108,11 @@ window.udtt = ((udtt, $, undefined) => {
         this.gallery();
         this.video();
         this.svg();
+        UI.navigation().onLoading();
       },
       resize() {
-        $(window).on("load resize", function () {
-          UI.navigation();
+        $(window).on("resize", () => {
+          UI.navigation().resizing();
         });
       },
       screen(max_width) {
@@ -158,11 +160,13 @@ window.udtt = ((udtt, $, undefined) => {
                     }, 5.5);
                   });
                 }
-                svg.on("mouseenter", function () {
-                  onoffColor(onColor);
-                });
-                svg.on("mouseleave", function () {
-                  onoffColor(offColor)
+                svg.on({
+                  "mouseenter": function () {
+                    onoffColor(onColor);
+                  },
+                  "mouseleave": function () {
+                    onoffColor(offColor)
+                  }
                 });
               }
             }, 5.5);
@@ -223,7 +227,8 @@ window.udtt = ((udtt, $, undefined) => {
           allow_resize: true,
           theme: 'facebook',
           slideshow: 5000,
-          autoplay_slideshow: false
+          autoplay_slideshow: false,
+
         });
 
         var $grid = $('.grid').imagesLoaded(function () {
@@ -252,6 +257,7 @@ window.udtt = ((udtt, $, undefined) => {
         const html = Util.cacheDom().cacheDomEls.html;
         let check = true;
         let $button_line = $('.global_menu_btn_line');
+        let isMobile = Util.Set().MobileChk().mobFunc();
         let $button_line_01 = $('.global_menu_btn_line_01');
         let $button_line_02 = $('.global_menu_btn_line_02');
         let $button_line_03 = $('.global_menu_btn_line_03');
@@ -264,58 +270,67 @@ window.udtt = ((udtt, $, undefined) => {
 
         // ON Navigation
         let NavigationEvent = () => {
-          if (!html.classList.contains('gnb-open')) {
-            html.classList.add('gnb-open');
-            // Start          
-            let y_position = 13;
-            TweenMax.set($button_line, {
-              backgroundColor: '#fff'
-            });
-            TweenMax.to($button_line_01, .3, {
-              delay: .2,
-              y: y_position,
-              rotation: 45,
-              ease: Quad.easeInOut
-            });
-            TweenMax.to($button_line_02, .3, {
-              width: 0,
-              ease: Quad.easeInOut
-            });
-            TweenMax.to($button_line_03, .3, {
-              delay: .2,
-              y: -y_position,
-              rotation: -45,
-              ease: Quad.easeInOut
-            });
-            TweenMax.fromTo($container, 0.5, {
-              autoAlpha: 0,
-              onComplete: function () {
-                $(".global_menu_nav").show();
-                TweenMax.staggerFromTo($('#menu>li'), 1, {
-                  y: 20,
-                  autoAlpha: 0
-                }, {
-                  css: {
-                    autoAlpha: 1,
-                    y: 0
-                  },
-                  ease: Back.easeOut.config(2),
-                  delay: 0.1
-                }, 0.1)
-              }
-            }, {
-              autoAlpha: 1
-            })
-          }
+          html.classList.add('gnb-open');
+          // Start          
+          let y_position = 13;
+          TweenMax.set($button_line, {
+            backgroundColor: '#fff'
+          });
+          TweenMax.fromTo($button_line_01, .3, {
+            y: 0,
+            x: 0,
+            rotation: 0,
+            ease: Quad.easeInOut
+          }, {
+            delay: .2,
+            y: y_position,
+            rotation: 45,
+            ease: Quad.easeInOut
+          });
+          TweenMax.fromTo($button_line_02, .3, {
+            delay: .2,
+            width: '100%',
+            ease: Quad.easeInOut
+          }, {
+            width: 0,
+            ease: Quad.easeInOut
+          });
+          TweenMax.fromTo($button_line_03, .3, {
+            y: 0,
+            x: 0,
+            rotation: 0,
+            ease: Quad.easeInOut
+          }, {
+            delay: .2,
+            y: -y_position,
+            rotation: -45,
+            ease: Quad.easeInOut
+          });
+          TweenMax.fromTo($container, 0.5, {
+            autoAlpha: 0,
+            onComplete: function () {
+              $(".global_menu_nav").show();
+              TweenMax.staggerFromTo($('#menu>li'), 1, {
+                y: 20,
+                autoAlpha: 0
+              }, {
+                css: {
+                  autoAlpha: 1,
+                  y: 0
+                },
+                ease: Back.easeOut.config(2),
+                delay: 0.1
+              }, 0.1)
+            }
+          }, {
+            autoAlpha: 1
+          })
+
         }
         // Off Navigation
         let NavigationEventDisable = () => {
+          let y_position = 13;
           html.classList.remove('gnb-open');
-          TweenMax.fromTo($container, 1, {
-            autoAlpha: 1
-          }, {
-            autoAlpha: 0
-          });
           TweenMax.fromTo($container, 1, {
             autoAlpha: 1,
             onComplete: function () {
@@ -344,18 +359,31 @@ window.udtt = ((udtt, $, undefined) => {
               backgroundColor: '#ceb238'
             });
           }
-          TweenMax.to($button_line_01, .3, {
+          TweenMax.fromTo($button_line_01, 0.3, {
+            delay: .2,
+            y: y_position,
+            rotation: 45,
+            ease: Quad.easeInOut
+          }, {
             y: 0,
             x: 0,
             rotation: 0,
             ease: Quad.easeInOut
-          });
-          TweenMax.to($button_line_02, .3, {
+          })
+          TweenMax.fromTo($button_line_02, .3, {
+            width: 0,
+            ease: Quad.easeInOut
+          }, {
             delay: .2,
             width: '100%',
             ease: Quad.easeInOut
           });
-          TweenMax.to($button_line_03, .3, {
+          TweenMax.fromTo($button_line_03, .3, {
+            delay: .2,
+            y: -y_position,
+            rotation: -45,
+            ease: Quad.easeInOut
+          }, {
             y: 0,
             x: 0,
             rotation: 0,
@@ -365,23 +393,23 @@ window.udtt = ((udtt, $, undefined) => {
         let desktop = () => {
           if ($("html").hasClass("gnb-open") && !Util.screen(800)) {
             $("html").removeClass("gnb-open");
-            TweenMax.to($button_line_01, .3, {
-              y: 0,
-              x: 0,
-              rotation: 0,
-              ease: Quad.easeInOut
-            });
-            TweenMax.to($button_line_02, .3, {
-              delay: .2,
-              width: '100%',
-              ease: Quad.easeInOut
-            });
-            TweenMax.to($button_line_03, .3, {
-              y: 0,
-              x: 0,
-              rotation: 0,
-              ease: Quad.easeInOut
-            });
+            // TweenMax.to($button_line_01, .3, {
+            //   y: 0,
+            //   x: 0,
+            //   rotation: 0,
+            //   ease: Quad.easeInOut
+            // });
+            // TweenMax.to($button_line_02, .3, {
+            //   delay: .2,
+            //   width: '100%',
+            //   ease: Quad.easeInOut
+            // });
+            // TweenMax.to($button_line_03, .3, {
+            //   y: 0,
+            //   x: 0,
+            //   rotation: 0,
+            //   ease: Quad.easeInOut
+            // });
             TweenMax.fromTo($container, 1, {
               autoAlpha: 1
             }, {
@@ -391,41 +419,33 @@ window.udtt = ((udtt, $, undefined) => {
               }
             }, );
           }
-          // TweenMax.fromTo($container, 1, {
-          //   autoAlpha: 1,
-          //   onComplete: function () {
-          //     $(".global_menu_nav").hide();
-          //     TweenMax.staggerFromTo($('#menu>li'), 1, {
-          //       y: 0,
-          //       autoAlpha: 1
-          //     }, {
-          //       css: {
-          //         autoAlpha: 0,
-          //         y: 20
-          //       },
-          //       ease: Back.easeOut.config(2),
-          //       delay: 0.1
-          //     }, 0.1)
-          //   }
-          // }, {
-          //   autoAlpha: 0
-          // })
         }
-        if ($("html").hasClass("mobile") || Util.screen(800)) {
-          toggleBtn.addEventListener("click", e => {
-            e.preventDefault();
-            if (check) {
+        let onLoading = () => {
+          hamburger.addEventListener("change", event => {
+            console.log(hamburger.checked);
+            if (hamburger.checked) {
               NavigationEvent();
-              check = false;
+              hamburger.classList.add("open");
             } else {
-              check = true;
               NavigationEventDisable();
+              hamburger.classList.remove("open");
             }
           });
-        } else {
-          $('.menu-gnb-container>ul>li').removeAttr('style');
-          TweenMax.killTweensOf($(".menu-gnb-container>ul>li"));
-          desktop();
+        }
+
+        let resizing = () => {
+          if (!Util.screen(800)) {
+            if (hamburger.checked) hamburger.checked = false;
+            $('.menu-gnb-container>ul>li').removeAttr('style');
+            $('.global_menu_btn_line').removeAttr('style');
+            TweenMax.killTweensOf($(".menu-gnb-container>ul>li"));
+            TweenMax.killTweensOf($(".global_menu_btn_line"));
+            desktop();
+          }
+        }
+        return {
+          resizing: resizing,
+          onLoading: onLoading
         }
       }
     });

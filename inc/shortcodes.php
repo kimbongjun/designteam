@@ -25,7 +25,7 @@ function udtt_gallery(){
         <div class="grid-item">
             <?php if($ext == 'mp4'):?>
                 <a href="#" class="video_fullscreen fadeUp">
-                    <video id="myVideo" width="100%" controls>
+                    <video id="myVideo" width="100%" controls <?php echo ($image['description'] ? 'poster='.$image['description']: '')?>>
                         <source src="<?php echo $image['url'];?>" type="video/mp4">
                     </video>
                 </a>                
