@@ -109,6 +109,197 @@ window.udtt = ((udtt, $, undefined) => {
         this.video();
         this.svg();
         UI.navigation().onLoading();
+        //this.barba();
+      },
+      barba() {
+        var transition_start_tween = {};
+        var transition_end_tween = {};
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+
+        if ('history' in window && 'pushState' in history) {
+          if (barba == "undefined") return;
+          // Wp admin link add data-barba-prevent attribute
+          if ($('body').hasClass('admin-bar')) {
+            $("#wpadminbar a").each(function () {
+              $(this).attr('data-barba-prevent', true);
+            });
+          }
+          // Prevent current url to reload page
+          $('a[href]').not('#logo a').on('click', function (e) {
+            if ($(this).hasClass('main-menu-link')) {
+              return;
+            }
+            if (e.currentTarget.href === window.location.href) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          });
+          var body_classes_tracker = '';
+          barba.init();
+          barba.hooks.leave(function (data) {
+            //UI.video();
+            return new Promise(function (resolve, reject) {
+              if ($('html').hasClass('mobile')) {
+
+                new TweenMax.to('#barba-wrapper', .2, {
+                  autoAlpha: 0,
+                  onComplete: function () {
+                    resolve();
+                  }
+                });
+
+              } else {
+
+                TweenMax.set('.transition_mask', {
+                  y: '-100%'
+                });
+                transition_start_tween.restart();
+
+                transition_start_tween.eventCallback("onComplete", function () {
+                  resolve();
+                });
+
+              }
+            });
+
+          }); // barba leave hook
+
+          barba.hooks.enter(function (data) {
+            var $new_dom = $(data.next.container);
+            var $old_dom = $(data.current.container);
+            $new_dom.css({
+              visibility: 'hidden'
+            });
+            // Update body class
+            var response = data.next.html.replace(/(<\/?)body( .+?)?>/gi, '$1notbody$2>', data.next.html);
+            body_classes_tracker = $(response).filter('notbody').attr('class');
+
+            // Update admin bar
+            if ($('body').hasClass('admin-bar')) {
+              $("#wpadminbar").replaceWith($(response).find('#wpadminbar'));
+              $("#wpadminbar a").each(function () {
+                $(this).attr('data-barba-prevent', true);
+              });
+            }
+
+
+            //$('#global_menu_outer').css('display', 'none');
+            //$('#global_menu_btn').removeClass('open');
+
+            if ($('html').hasClass('ie')) {
+              TweenMax.set('.global_menu_btn_line', {
+                backgroundColor: '#1e39b4'
+              });
+            } else {
+              TweenMax.set('.global_menu_btn_line', {
+                backgroundColor: '#ceb238'
+              });
+            }
+            TweenMax.set('.global_menu_btn_line_01, .global_menu_btn_line_03', {
+              y: 0,
+              x: 0,
+              rotation: 0
+            });
+            TweenMax.set('.global_menu_btn_line_02', {
+              width: '100%'
+            });
+            console.log($new_dom, $old_dom, data.current.container);
+            // Prevent memory leak
+            //clean_memory($(data.current.container));
+
+            // After images are full loaded process the transition                        
+            $new_dom.imagesLoaded(function () {
+
+              $new_dom.css({
+                visibility: 'visible'
+              });
+
+              if ($('html').hasClass('mobile')) {
+                new TweenMax.to('#barba-wrapper', .2, {
+                  autoAlpha: 1
+                });
+              } else {
+                transition_end_tween.restart();
+              }
+
+              //JT.ui.init();
+            }); // imagesLoaded
+
+          }); // barba enter hook          
+        }
+        var $container = $('#transition_container');
+        var $transition = $('.transition_mask');
+        var $artboard = $('#transition_layer');
+        var $smile = $('#transition_layer_path');
+
+        // Start
+        transition_start_tween = new TimelineMax({
+          paused: true
+        });
+        transition_start_tween.fromTo($transition, .5, {
+          y: '-100%'
+        }, {
+          y: '0%',
+          ease: Power3.easeOut,
+          onStart: function () {
+            TweenMax.set($container, {
+              autoAlpha: 1
+            });
+          }
+        });
+
+        // End
+        transition_end_tween = new TimelineMax({
+          paused: true
+        });
+        transition_end_tween.fromTo($smile, .3, {
+            autoAlpha: 0
+          }, {
+            autoAlpha: 1,
+            delay: .05,
+            ease: Power2.easeOut,
+            onStart: function () {
+              TweenMax.set($artboard, {
+                height: $(window).height()
+              });
+              TweenMax.set($smile, {
+                morphSVG: '#transition_layer_start'
+              });
+              $smile.show();
+
+              TweenMax.fromTo('#transition_layer_svg', .3, {
+                scale: 0
+              }, {
+                scale: 1,
+                transformOrigin: '50% 50%',
+                ease: Power2.easeOut
+              });
+              TweenMax.to($smile, .45, {
+                morphSVG: '#transition_layer_end',
+                ease: Power2.easeOut,
+                delay: .05
+              });
+            }
+          })
+          .to($transition, .5, {
+            y: '100%',
+            ease: Power2.easeOut,
+            delay: .45,
+            onStart: function () {
+              TweenMax.to($artboard, .5, {
+                height: 0,
+                ease: Power2.easeOut
+              });
+            },
+            onComplete: function () {
+              TweenMax.set($container, {
+                autoAlpha: 0
+              });
+            }
+          });
+
       },
       resize() {
         $(window).on("resize", () => {

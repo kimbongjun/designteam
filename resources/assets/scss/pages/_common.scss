@@ -5,7 +5,11 @@ html.gnb-open {
 /* fix scroll */
 #barba-wrapper {
     position: relative;
-    //overflow: hidden;
+    overflow: hidden;
+
+    .mainpage & {
+        position: static;
+    }
 }
 
 .barba-container {
