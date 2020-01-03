@@ -55,6 +55,7 @@
                     visibility: hidden;
                     position: relative;
                     padding: 1rem;
+                    color: $black;
 
                     @include respond-max(sm) {
                         padding: 10px;

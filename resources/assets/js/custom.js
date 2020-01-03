@@ -9,7 +9,7 @@ window.udtt = ((udtt, $, undefined) => {
   document.addEventListener("DOMContentLoaded", () => {
     Util.init();
     UI.init();
-    $(window).trigger('resize');
+    $(window).trigger("resize");
   });
   const Util = (udtt.Util = {
       init() {
@@ -107,199 +107,178 @@ window.udtt = ((udtt, $, undefined) => {
         this.resize();
         this.gallery();
         this.video();
+        this.two();
         this.svg();
         UI.navigation().onLoading();
         //this.barba();
       },
-      barba() {
-        var transition_start_tween = {};
-        var transition_end_tween = {};
-        if ('scrollRestoration' in history) {
-          history.scrollRestoration = 'manual';
-        }
+      two() {
+        const html = Util.cacheDom().cacheDomEls.html;
+        const body = Util.cacheDom().cacheDomEls.body;
+        const target = document.querySelector(".two-wrap");
+        if (
+          body.classList.contains("home") &&
+          !html.classList.contains("mobile")
+        ) {
+          var type = /(canvas|webgl)/.test(url.type) ? url.type : "svg";
+          var two = new Two({
+            type: Two.Types[type],
+            fullscreen: true,
+            autostart: true
+          }).appendTo(target);
 
-        if ('history' in window && 'pushState' in history) {
-          if (barba == "undefined") return;
-          // Wp admin link add data-barba-prevent attribute
-          if ($('body').hasClass('admin-bar')) {
-            $("#wpadminbar a").each(function () {
-              $(this).attr('data-barba-prevent', true);
-            });
+          var amt = 64;
+          var path = two.makeCurve(
+            _.map(_.range(amt), function (i) {
+              var pct = i / (amt - 1);
+              var theta = pct * Math.PI * 8;
+              var r = pct * Math.min(two.height, two.width);
+              var x = r * Math.cos(theta);
+              var y = r * Math.sin(theta);
+              return new Two.Anchor(x, y);
+            }),
+            true
+          );
+          // Two.js colors from main.css
+          var colors = ["#f09dba", "#b781d6", "#8981e6"];
+          colors.index = 0;
+
+          var linearGradient = two.makeLinearGradient(
+            two.width / 2,
+            -two.height / 2,
+            two.width / 2,
+            two.height / 2,
+            new Two.Stop(0, colors[0]),
+            new Two.Stop(1, colors[1]),
+            new Two.Stop(1, colors[2])
+          );
+
+          path.noFill().linewidth = 25;
+          path.cap = path.join = "round";
+          path.stroke = linearGradient;
+
+          var cursor = two.makeCircle(0, 0, 25);
+          cursor.fill = cursor.stroke = linearGradient;
+          cursor.linewidth = 10;
+          cursor.cap = cursor.join = "round";
+
+
+          var mass = 10;
+          var radius = two.height / 5;
+          var strength = 0.0625;
+          var drag = 0.0;
+
+          var background = two.makeGroup();
+          var foreground = two.makeGroup();
+
+          var physics = new Physics();
+          var points = [];
+          var i = 0;
+
+          for (i = 0; i < Two.Resolution; i++) {
+            var pct = i / Two.Resolution;
+            var theta = pct * Math.PI * 2;
+
+            var ax = radius * Math.cos(theta);
+            var ay = radius * Math.sin(theta);
+
+            var variance = Math.random() * 0.5 + 0.5;
+            var bx = variance * ax;
+            var by = variance * ay;
+
+            var origin = physics.makeParticle(mass, ax, ay);
+            var particle = physics.makeParticle(
+              Math.random() * mass * 0.66 + mass * 0.33,
+              bx,
+              by
+            );
+            var spring = physics.makeSpring(
+              particle,
+              origin,
+              strength,
+              drag,
+              0
+            );
+
+            origin.makeFixed();
+
+            particle.shape = two.makeCircle(
+              particle.position.x,
+              particle.position.y,
+              5
+            );
+            particle.shape.noStroke().fill = "#fff";
+            particle.position = particle.shape.translation;
+
+            foreground.add(particle.shape);
+            points.push(particle.position);
           }
-          // Prevent current url to reload page
-          $('a[href]').not('#logo a').on('click', function (e) {
-            if ($(this).hasClass('main-menu-link')) {
-              return;
-            }
-            if (e.currentTarget.href === window.location.href) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          });
-          var body_classes_tracker = '';
-          barba.init();
-          barba.hooks.leave(function (data) {
-            //UI.video();
-            return new Promise(function (resolve, reject) {
-              if ($('html').hasClass('mobile')) {
 
-                new TweenMax.to('#barba-wrapper', .2, {
-                  autoAlpha: 0,
-                  onComplete: function () {
-                    resolve();
-                  }
-                });
+          var outer = new Two.Path(points, true, true);
+          var color = getRandomColor();
+          outer.stroke = color.toString();
+          outer.fill = color.toString(0.5);
+          outer.scale = 1.75;
+          outer.linewidth = 10;
 
-              } else {
 
-                TweenMax.set('.transition_mask', {
-                  y: '-100%'
-                });
-                transition_start_tween.restart();
 
-                transition_start_tween.eventCallback("onComplete", function () {
-                  resolve();
-                });
+          var inner = new Two.Path(points, true, true);
+          inner.noStroke();
+          inner.fill = getRandomColor().toString();
+          inner.scale = 1.25;
 
+          background.add(outer);
+          background.add(inner);
+
+
+
+
+          function getRandomColor() {
+            var color = {
+              r: Math.floor(Math.random() * 255),
+              g: Math.floor(Math.random() * 255),
+              b: Math.floor(Math.random() * 255),
+              toString: function (a) {
+                if (a) {
+                  return (
+                    "rgba(" +
+                    color.r +
+                    "," +
+                    color.g +
+                    "," +
+                    color.b +
+                    "," +
+                    a +
+                    ")"
+                  );
+                }
+                return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
               }
-            });
-
-          }); // barba leave hook
-
-          barba.hooks.enter(function (data) {
-            var $new_dom = $(data.next.container);
-            var $old_dom = $(data.current.container);
-            $new_dom.css({
-              visibility: 'hidden'
-            });
-            // Update body class
-            var response = data.next.html.replace(/(<\/?)body( .+?)?>/gi, '$1notbody$2>', data.next.html);
-            body_classes_tracker = $(response).filter('notbody').attr('class');
-
-            // Update admin bar
-            if ($('body').hasClass('admin-bar')) {
-              $("#wpadminbar").replaceWith($(response).find('#wpadminbar'));
-              $("#wpadminbar a").each(function () {
-                $(this).attr('data-barba-prevent', true);
-              });
-            }
-
-
-            //$('#global_menu_outer').css('display', 'none');
-            //$('#global_menu_btn').removeClass('open');
-
-            if ($('html').hasClass('ie')) {
-              TweenMax.set('.global_menu_btn_line', {
-                backgroundColor: '#1e39b4'
-              });
-            } else {
-              TweenMax.set('.global_menu_btn_line', {
-                backgroundColor: '#ceb238'
-              });
-            }
-            TweenMax.set('.global_menu_btn_line_01, .global_menu_btn_line_03', {
-              y: 0,
-              x: 0,
-              rotation: 0
-            });
-            TweenMax.set('.global_menu_btn_line_02', {
-              width: '100%'
-            });
-            console.log($new_dom, $old_dom, data.current.container);
-            // Prevent memory leak
-            //clean_memory($(data.current.container));
-
-            // After images are full loaded process the transition                        
-            $new_dom.imagesLoaded(function () {
-
-              $new_dom.css({
-                visibility: 'visible'
-              });
-
-              if ($('html').hasClass('mobile')) {
-                new TweenMax.to('#barba-wrapper', .2, {
-                  autoAlpha: 1
-                });
-              } else {
-                transition_end_tween.restart();
-              }
-
-              //JT.ui.init();
-            }); // imagesLoaded
-
-          }); // barba enter hook          
-        }
-        var $container = $('#transition_container');
-        var $transition = $('.transition_mask');
-        var $artboard = $('#transition_layer');
-        var $smile = $('#transition_layer_path');
-
-        // Start
-        transition_start_tween = new TimelineMax({
-          paused: true
-        });
-        transition_start_tween.fromTo($transition, .5, {
-          y: '-100%'
-        }, {
-          y: '0%',
-          ease: Power3.easeOut,
-          onStart: function () {
-            TweenMax.set($container, {
-              autoAlpha: 1
-            });
+            };
+            return color;
           }
-        });
 
-        // End
-        transition_end_tween = new TimelineMax({
-          paused: true
-        });
-        transition_end_tween.fromTo($smile, .3, {
-            autoAlpha: 0
-          }, {
-            autoAlpha: 1,
-            delay: .05,
-            ease: Power2.easeOut,
-            onStart: function () {
-              TweenMax.set($artboard, {
-                height: $(window).height()
-              });
-              TweenMax.set($smile, {
-                morphSVG: '#transition_layer_start'
-              });
-              $smile.show();
+          var rotating = false;
 
-              TweenMax.fromTo('#transition_layer_svg', .3, {
-                scale: 0
-              }, {
-                scale: 1,
-                transformOrigin: '50% 50%',
-                ease: Power2.easeOut
-              });
-              TweenMax.to($smile, .45, {
-                morphSVG: '#transition_layer_end',
-                ease: Power2.easeOut,
-                delay: .05
-              });
-            }
-          })
-          .to($transition, .5, {
-            y: '100%',
-            ease: Power2.easeOut,
-            delay: .45,
-            onStart: function () {
-              TweenMax.to($artboard, .5, {
-                height: 0,
-                ease: Power2.easeOut
-              });
-            },
-            onComplete: function () {
-              TweenMax.set($container, {
-                autoAlpha: 0
-              });
-            }
+          $(window).bind("click", function (e) {
+            rotating = !rotating;
           });
 
+          two.scene.translation.set(two.width / 2, two.height / 2);
+
+          two
+            .bind("update", function () {
+              if (rotating) {
+                two.scene.rotation += Math.PI / 64;
+                physics.update();
+              }
+
+            })
+            .bind("resize", function () {
+              two.scene.translation.set(two.width / 2, two.height / 2);
+            });
+        }
       },
       resize() {
         $(window).on("resize", () => {
@@ -316,8 +295,8 @@ window.udtt = ((udtt, $, undefined) => {
       },
       svg() {
         if (!$("html").hasClass("mobile")) {
-          let svg = $('#udtt_svg');
-          let pathes = svg.find('.cls-1');
+          let svg = $("#udtt_svg");
+          let pathes = svg.find(".cls-1");
           let onColor = "#ff0";
           let offColor = "#fff";
           pathes.each(function (i, path) {
@@ -329,38 +308,47 @@ window.udtt = ((udtt, $, undefined) => {
             // 3번 부분
             path.style.strokeDashoffset = total_length;
             // 4번 부분
-            TweenMax.to($(path), 1, {
-              strokeDashoffset: "0",
-              onComplete: function () {
-                let onoffColor = color => {
-                  let pathes = svg.find('.cls-1');
-                  pathes.each(function (i, path) {
-                    // 1번 부분            
-                    var total_length = path.getTotalLength();
+            TweenMax.to(
+              $(path),
+              1, {
+                strokeDashoffset: "0",
+                onComplete: function () {
+                  let onoffColor = color => {
+                    let pathes = svg.find(".cls-1");
+                    pathes.each(function (i, path) {
+                      // 1번 부분
+                      var total_length = path.getTotalLength();
 
-                    // 2번 부분
-                    path.style.strokeDasharray = total_length + " " + total_length;
-                    // 3번 부분
-                    path.style.strokeDashoffset = total_length;
-                    // 4번 부분
-                    TweenMax.to($(path), 1, {
-                      strokeDashoffset: "0",
-                      autoRound: false,
-                      ease: Linear.easeNone,
-                      stroke: color
-                    }, 5.5);
+                      // 2번 부분
+                      path.style.strokeDasharray =
+                        total_length + " " + total_length;
+                      // 3번 부분
+                      path.style.strokeDashoffset = total_length;
+                      // 4번 부분
+                      TweenMax.to(
+                        $(path),
+                        1, {
+                          strokeDashoffset: "0",
+                          autoRound: false,
+                          ease: Linear.easeNone,
+                          stroke: color
+                        },
+                        5.5
+                      );
+                    });
+                  };
+                  svg.on({
+                    mouseenter: function () {
+                      onoffColor(onColor);
+                    },
+                    mouseleave: function () {
+                      onoffColor(offColor);
+                    }
                   });
                 }
-                svg.on({
-                  "mouseenter": function () {
-                    onoffColor(onColor);
-                  },
-                  "mouseleave": function () {
-                    onoffColor(offColor)
-                  }
-                });
-              }
-            }, 5.5);
+              },
+              5.5
+            );
           });
         }
       },
@@ -369,17 +357,17 @@ window.udtt = ((udtt, $, undefined) => {
           var bv = new Bideo();
           bv.init({
             // Video element
-            videoEl: document.querySelector('#myVideo'),
+            videoEl: document.querySelector("#myVideo"),
 
             // Container element
-            container: document.querySelector('body'),
+            container: document.querySelector("body"),
 
             // Resize
             resize: true,
 
             // autoplay: false,
 
-            isMobile: window.matchMedia('(max-width: 768px)').matches,
+            isMobile: window.matchMedia("(max-width: 768px)").matches,
 
             // playButton: document.querySelector('#play'),
             // pauseButton: document.querySelector('#pause'),
@@ -387,13 +375,13 @@ window.udtt = ((udtt, $, undefined) => {
             // Array of objects containing the src and type
             // of different video formats to add
             src: [{
-              src: '/wp-content/uploads/sites/427/2019/12/IMG_5935.mp4',
-              type: 'video/mp4'
+              src: "/wp-content/uploads/sites/427/2019/12/IMG_5935.mp4",
+              type: "video/mp4"
             }],
 
             // What to do once video loads (initial frame)
             onLoad: function () {
-              document.querySelector('#video_cover').style.display = 'none';
+              document.querySelector("#video_cover").style.display = "none";
             }
           });
         } else {
@@ -401,44 +389,34 @@ window.udtt = ((udtt, $, undefined) => {
         }
       },
       gallery() {
-        // TweenMax.staggerFromTo($('.grid-item'), 1, {
-        //   y: 20
-        // }, {
-        //   css: {
-        //     autoAlpha: 1,
-        //     y: 0
-        //   },
-        //   ease: Back.easeOut.config(2),
-        //   delay: 0.1
-        // }, 0.1)
-
-
-        $("a[rel^='prettyPhoto']").prettyPhoto({
-          social_tools: false,
-          allow_resize: true,
-          theme: 'facebook',
-          slideshow: 5000,
-          autoplay_slideshow: false,
-
-        });
-
-        var $grid = $('.grid').imagesLoaded(function () {
+        var $grid = $(".grid").imagesLoaded(function () {
           $grid.isotope({
-            itemSelector: '.grid-item',
+            itemSelector: ".grid-item",
             percentPosition: true,
             masonry: {
-              columnWidth: '.grid-sizer',
+              columnWidth: ".grid-sizer"
             },
             onLayout: function () {
               forceLoad();
             }
           });
         });
-        $(".video_fullscreen").on("click", function (e) {
-          e.preventDefault();
-        });
-        // $grid.imagesLoaded().always(function () {
-        //   $grid.isotope('layout');
+        // $(".kboard-pure-gallery-list").magnificPopup({
+        //   delegate: "a",
+        //   type: "image",
+        //   tLoading: "Loading image #%curr%...",
+        //   mainClass: "mfp-img-mobile",
+        //   gallery: {
+        //     enabled: true,
+        //     navigateByImgClick: true,
+        //     preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+        //   },
+        //   image: {
+        //     tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+        //     // titleSrc: function (item) {
+        //     //   return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';
+        //     // }
+        //   }
         // });
       },
       navigation() {
@@ -447,140 +425,175 @@ window.udtt = ((udtt, $, undefined) => {
         const body = Util.cacheDom().cacheDomEls.body;
         const html = Util.cacheDom().cacheDomEls.html;
         let check = true;
-        let $button_line = $('.global_menu_btn_line');
-        let isMobile = Util.Set().MobileChk().mobFunc();
-        let $button_line_01 = $('.global_menu_btn_line_01');
-        let $button_line_02 = $('.global_menu_btn_line_02');
-        let $button_line_03 = $('.global_menu_btn_line_03');
-        let $container = $('#transition_container');
+        let $button_line = $(".global_menu_btn_line");
+        let isMobile = Util.Set()
+          .MobileChk()
+          .mobFunc();
+        let $button_line_01 = $(".global_menu_btn_line_01");
+        let $button_line_02 = $(".global_menu_btn_line_02");
+        let $button_line_03 = $(".global_menu_btn_line_03");
+        let $container = $("#transition_container");
         let $menu_container_inner = $(".global_menu_btn_inner");
 
-        window.addEventListener('scroll', e => {
-          (window.pageYOffset >= 300) ? header.classList.add("on-scroll"): header.classList.remove("on-scroll")
+        window.addEventListener("scroll", e => {
+          window.pageYOffset >= 300 ?
+            header.classList.add("on-scroll") :
+            header.classList.remove("on-scroll");
         });
 
         // ON Navigation
         let NavigationEvent = () => {
-          html.classList.add('gnb-open');
-          // Start          
+          html.classList.add("gnb-open");
+          // Start
           let y_position = 13;
           TweenMax.set($button_line, {
-            backgroundColor: '#fff'
+            backgroundColor: "#fff"
           });
-          TweenMax.fromTo($button_line_01, .3, {
-            y: 0,
-            x: 0,
-            rotation: 0,
-            ease: Quad.easeInOut
-          }, {
-            delay: .2,
-            y: y_position,
-            rotation: 45,
-            ease: Quad.easeInOut
-          });
-          TweenMax.fromTo($button_line_02, .3, {
-            delay: .2,
-            width: '100%',
-            ease: Quad.easeInOut
-          }, {
-            width: 0,
-            ease: Quad.easeInOut
-          });
-          TweenMax.fromTo($button_line_03, .3, {
-            y: 0,
-            x: 0,
-            rotation: 0,
-            ease: Quad.easeInOut
-          }, {
-            delay: .2,
-            y: -y_position,
-            rotation: -45,
-            ease: Quad.easeInOut
-          });
-          TweenMax.fromTo($container, 0.5, {
-            autoAlpha: 0,
-            onComplete: function () {
-              $(".global_menu_nav").show();
-              TweenMax.staggerFromTo($('#menu>li'), 1, {
-                y: 20,
-                autoAlpha: 0
-              }, {
-                css: {
-                  autoAlpha: 1,
-                  y: 0
-                },
-                ease: Back.easeOut.config(2),
-                delay: 0.1
-              }, 0.1)
+          TweenMax.fromTo(
+            $button_line_01,
+            0.3, {
+              y: 0,
+              x: 0,
+              rotation: 0,
+              ease: Quad.easeInOut
+            }, {
+              delay: 0.2,
+              y: y_position,
+              rotation: 45,
+              ease: Quad.easeInOut
             }
-          }, {
-            autoAlpha: 1
-          })
-
-        }
+          );
+          TweenMax.fromTo(
+            $button_line_02,
+            0.3, {
+              delay: 0.2,
+              width: "100%",
+              ease: Quad.easeInOut
+            }, {
+              width: 0,
+              ease: Quad.easeInOut
+            }
+          );
+          TweenMax.fromTo(
+            $button_line_03,
+            0.3, {
+              y: 0,
+              x: 0,
+              rotation: 0,
+              ease: Quad.easeInOut
+            }, {
+              delay: 0.2,
+              y: -y_position,
+              rotation: -45,
+              ease: Quad.easeInOut
+            }
+          );
+          TweenMax.fromTo(
+            $container,
+            0.5, {
+              autoAlpha: 0,
+              onComplete: function () {
+                $(".global_menu_nav").show();
+                TweenMax.staggerFromTo(
+                  $("#menu>li"),
+                  1, {
+                    y: 20,
+                    autoAlpha: 0
+                  }, {
+                    css: {
+                      autoAlpha: 1,
+                      y: 0
+                    },
+                    ease: Back.easeOut.config(2),
+                    delay: 0.1
+                  },
+                  0.1
+                );
+              }
+            }, {
+              autoAlpha: 1
+            }
+          );
+        };
         // Off Navigation
         let NavigationEventDisable = () => {
           let y_position = 13;
-          html.classList.remove('gnb-open');
-          TweenMax.fromTo($container, 1, {
-            autoAlpha: 1,
-            onComplete: function () {
-              $(".global_menu_nav").hide();
-              TweenMax.staggerFromTo($('#menu>li'), 1, {
-                y: 0,
-                autoAlpha: 1
-              }, {
-                css: {
-                  autoAlpha: 0,
-                  y: 20
-                },
-                ease: Back.easeOut.config(2),
-                delay: 0.1
-              }, 0.1)
+          html.classList.remove("gnb-open");
+          TweenMax.fromTo(
+            $container,
+            1, {
+              autoAlpha: 1,
+              onComplete: function () {
+                $(".global_menu_nav").hide();
+                TweenMax.staggerFromTo(
+                  $("#menu>li"),
+                  1, {
+                    y: 0,
+                    autoAlpha: 1
+                  }, {
+                    css: {
+                      autoAlpha: 0,
+                      y: 20
+                    },
+                    ease: Back.easeOut.config(2),
+                    delay: 0.1
+                  },
+                  0.1
+                );
+              }
+            }, {
+              autoAlpha: 0
             }
-          }, {
-            autoAlpha: 0,
-          })
-          if ($('html').hasClass('ie')) {
-            TweenMax.to($button_line, .3, {
-              backgroundColor: '#1e39b4'
+          );
+          if ($("html").hasClass("ie")) {
+            TweenMax.to($button_line, 0.3, {
+              backgroundColor: "#1e39b4"
             });
           } else {
-            TweenMax.to($button_line, .3, {
-              backgroundColor: '#ceb238'
+            TweenMax.to($button_line, 0.3, {
+              backgroundColor: "#ceb238"
             });
           }
-          TweenMax.fromTo($button_line_01, 0.3, {
-            delay: .2,
-            y: y_position,
-            rotation: 45,
-            ease: Quad.easeInOut
-          }, {
-            y: 0,
-            x: 0,
-            rotation: 0,
-            ease: Quad.easeInOut
-          })
-          TweenMax.fromTo($button_line_02, .3, {
-            width: 0,
-            ease: Quad.easeInOut
-          }, {
-            delay: .2,
-            width: '100%',
-            ease: Quad.easeInOut
-          });
-          TweenMax.fromTo($button_line_03, .3, {
-            delay: .2,
-            y: -y_position,
-            rotation: -45,
-            ease: Quad.easeInOut
-          }, {
-            y: 0,
-            x: 0,
-            rotation: 0,
-            ease: Quad.easeInOut
-          });
-        }
+          TweenMax.fromTo(
+            $button_line_01,
+            0.3, {
+              delay: 0.2,
+              y: y_position,
+              rotation: 45,
+              ease: Quad.easeInOut
+            }, {
+              y: 0,
+              x: 0,
+              rotation: 0,
+              ease: Quad.easeInOut
+            }
+          );
+          TweenMax.fromTo(
+            $button_line_02,
+            0.3, {
+              width: 0,
+              ease: Quad.easeInOut
+            }, {
+              delay: 0.2,
+              width: "100%",
+              ease: Quad.easeInOut
+            }
+          );
+          TweenMax.fromTo(
+            $button_line_03,
+            0.3, {
+              delay: 0.2,
+              y: -y_position,
+              rotation: -45,
+              ease: Quad.easeInOut
+            }, {
+              y: 0,
+              x: 0,
+              rotation: 0,
+              ease: Quad.easeInOut
+            }
+          );
+        };
         let desktop = () => {
           if ($("html").hasClass("gnb-open") && !Util.screen(800)) {
             $("html").removeClass("gnb-open");
@@ -601,19 +614,21 @@ window.udtt = ((udtt, $, undefined) => {
             //   rotation: 0,
             //   ease: Quad.easeInOut
             // });
-            TweenMax.fromTo($container, 1, {
-              autoAlpha: 1
-            }, {
-              autoAlpha: 0,
-              onComplete: function () {
-                $('.menu-gnb-container>ul>li').removeAttr('style');
+            TweenMax.fromTo(
+              $container,
+              1, {
+                autoAlpha: 1
+              }, {
+                autoAlpha: 0,
+                onComplete: function () {
+                  $(".menu-gnb-container>ul>li").removeAttr("style");
+                }
               }
-            }, );
+            );
           }
-        }
+        };
         let onLoading = () => {
           hamburger.addEventListener("change", event => {
-            console.log(hamburger.checked);
             if (hamburger.checked) {
               NavigationEvent();
               hamburger.classList.add("open");
@@ -622,22 +637,22 @@ window.udtt = ((udtt, $, undefined) => {
               hamburger.classList.remove("open");
             }
           });
-        }
+        };
 
         let resizing = () => {
           if (!Util.screen(800)) {
             if (hamburger.checked) hamburger.checked = false;
-            $('.menu-gnb-container>ul>li').removeAttr('style');
-            $('.global_menu_btn_line').removeAttr('style');
+            $(".menu-gnb-container>ul>li").removeAttr("style");
+            $(".global_menu_btn_line").removeAttr("style");
             TweenMax.killTweensOf($(".menu-gnb-container>ul>li"));
             TweenMax.killTweensOf($(".global_menu_btn_line"));
             desktop();
           }
-        }
+        };
         return {
           resizing: resizing,
           onLoading: onLoading
-        }
+        };
       }
     });
 })(window.udtt || {}, jQuery);

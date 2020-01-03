@@ -29,29 +29,29 @@
               $the_query = new WP_Query($args);              
               if ( $the_query->have_posts() ) :
                 ?>
-                <div class="post-wrap">
-                    <ul>
+                <div class="post-wrap grid">
+                    <div class="grid-sizer"></div>
                     <?php                                              
 					while ( $the_query->have_posts() ) : $the_query->the_post();
 					$thumbnail = get_the_post_thumbnail( $post->ID, 'full' );
-                    echo '<li>';
-                        echo '<a href='.get_permalink().'>';
+                    echo '<div class="grid-item">';
+                        echo '<a href='.get_permalink().' class="fadeUp">';
 						echo '<figure class="post_thumbnail">';
 						if($thumbnail):
 						echo get_the_post_thumbnail( $post->ID, 'full' );
 						else:
 						echo '<img src="//placekitten.com/600/600">';
-						endif;
-						echo '<figcaption style="padding: 1rem;">';
+						endif;						
+						echo '</figure>';      
+                        echo '<div style="padding: 1rem;background-color: #fff;">';
 						echo '<h4 class="post_desc" style="margin: 0 0 0.5rem;line-height: 1;">';
 						echo get_the_title();                            
 						echo '</h4>';
 						$user_id = get_the_author_meta( 'ID' );
 						echo '<p style="margin: 0;">지은이 : '.get_the_author_meta( 'display_name').'</p>';
-						echo '</figcaption>';
-						echo '</figure>';                        
+						echo '</div>';
                         echo '</a>';
-                    echo '</li>';
+                    echo '</div>';
 					endwhile;																															
                     ?>
                     </ul>                   
