@@ -389,35 +389,17 @@ window.udtt = ((udtt, $, undefined) => {
         }
       },
       gallery() {
-        var $grid = $(".grid").imagesLoaded(function () {
-          $grid.isotope({
-            itemSelector: ".grid-item",
-            percentPosition: true,
-            masonry: {
-              columnWidth: ".grid-sizer"
-            },
-            onLayout: function () {
-              forceLoad();
-            }
-          });
+
+        $(".grid").isotope({
+          itemSelector: ".grid-item",
+          percentPosition: true,
+          masonry: {
+            columnWidth: ".grid-sizer"
+          },
+          onLayout: function () {
+            forceLoad();
+          }
         });
-        // $(".kboard-pure-gallery-list").magnificPopup({
-        //   delegate: "a",
-        //   type: "image",
-        //   tLoading: "Loading image #%curr%...",
-        //   mainClass: "mfp-img-mobile",
-        //   gallery: {
-        //     enabled: true,
-        //     navigateByImgClick: true,
-        //     preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
-        //   },
-        //   image: {
-        //     tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
-        //     // titleSrc: function (item) {
-        //     //   return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';
-        //     // }
-        //   }
-        // });
       },
       navigation() {
         const toggleBtn = Util.cacheDom().cacheDomEls.hamburger;

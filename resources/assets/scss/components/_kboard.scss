@@ -11,3 +11,35 @@
 body .kboard-comments-default .comments-list .comments-list-content img {
     max-width: 50%;
 }
+
+#kboard-pure-gallery-list {
+    .grid-item {
+        a {
+            padding-bottom: 0;
+        }
+
+        .kboard-comments-area {
+            opacity: 0;
+            visibility: hidden;
+            padding: 0 1rem 1rem 1rem;
+
+            @include respond-max(md) {
+                padding: 0 10px 10px 10px;
+            }
+
+            .kboard-comments-wrap {
+                padding-top: 0;
+
+                .kboard-comments-form {
+                    .comments-submit-button {
+                        margin-top: 10px;
+                    }
+
+                    .comments-field {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}

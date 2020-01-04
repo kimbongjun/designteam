@@ -1,30 +1,4 @@
 <?php
-function loginPage(){
-    ?>
-    <div id="map" style="width:100%;height:400px;"></div>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=avjhn29rjv"></script>
-    <script>
-    //지도를 삽입할 HTML 요소 또는 HTML 요소의 id를 지정합니다.
-    var mapDiv = document.getElementById('map'); // 'map'으로 선언해도 동일
-
-    //옵션 없이 지도 객체를 생성하면 서울 시청을 중심으로 하는 11 레벨의 지도가 생성됩니다.
-    var map = new naver.maps.Map('map',{
-         useStyleMap: true,
-          center: new naver.maps.LatLng(37.3595704, 127.105399),
-          zoom: 10
-    });
-    //   var map = null;
-    //   var maps = document.getElementById('map');
-    //     function initMap() {
-    //         map = new naver.maps.Map(maps, {
-    //             center: new naver.maps.LatLng(37.3595704, 127.105399),
-    //             zoom: 10
-    //         });
-    //     }
-    </script>
-   <?php 
-}
-add_shortcode('loginPage', 'loginPage');
 function udtt_gallery(){
         ob_start();
         ?>
@@ -32,7 +6,7 @@ function udtt_gallery(){
         $images = get_field('udtt_gallery', 'option');        
         if( $images ): 
         ?>
-        <div class="grid">
+        <div class="grid fadeUp">
             <div class="grid-sizer"></div>
         <?php foreach( $images as $image ):                      
 
@@ -46,9 +20,9 @@ function udtt_gallery(){
                     </video>
                 </a>                
             <?php else:?>
-            <a href="<?php echo $image['url']; ?>" rel="prettyPhoto[pp_gal]" class="fadeUp">                 
+            <a href="<?php echo $image['url']; ?>" class="fadeUp" title="<?=$image['caption']?>" data-alt="<?=$image['alt']; ?>">
                 <figure>
-                    <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" />
+                    <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" class="lazy"/>
                 </figure>                
                 <?php
                     if($image['caption'] || $image['alt']):
@@ -70,6 +44,30 @@ function udtt_gallery(){
         <?php endforeach; ?>
         </div>
         <?php endif;?>
+        <script>
+        (function ($) {
+            $(function () {
+                $('.grid-item').magnificPopup({
+                    delegate: 'a:not(.video_fullscreen)',
+                    type: 'image',
+                    tLoading: 'Loading image #%curr%...',
+                    mainClass: 'mfp-img-mobile',
+                    gallery: {
+                        enabled: true,
+                        navigateByImgClick: true,
+                        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+                    },
+                    image: {
+                        tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                        titleSrc: function (item) {
+                            return item.el.attr('title') + '<small>' + item.el.attr('data-alt') + '</small>';
+                        }
+                    }
+                });
+
+            })
+        })(jQuery)
+        </script>
         <?php
         $output = ob_get_clean();
         return $output;
