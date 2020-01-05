@@ -547,7 +547,7 @@ window.udtt = ((udtt, $, undefined) => {
           },
           spin: function () {
             // Start the wheel only if it's not already spinning                  
-            if (wheel.timerHandle == 0 && wheel.maxLength != 0) {
+            if (wheel.timerHandle == 0 && wheel.maxLength > 1) {
               wheel.spinStart = new Date().getTime();
               wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
               wheel.frames = 0;
@@ -555,7 +555,11 @@ window.udtt = ((udtt, $, undefined) => {
 
               wheel.timerHandle = setInterval(wheel.onTimerTick, wheel.timerDelay);
             } else {
-              alert("밥 먹기 싫어요?");
+              if (wheel.frames == 0) {
+                alert("밥 먹기 싫어요?");
+              } else {
+                alert("'한솥도시락' 가기 전에 클릭 한 번만 해요.^^");
+              }
             }
           },
           initAudio: function () {
@@ -595,7 +599,7 @@ window.udtt = ((udtt, $, undefined) => {
               wheel.sound.pause();
               var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2)) * wheel.segments.length) - 1;
               if (wheel.segments[i] == '그냥 굶는다.') {
-                $("#counter").html('<h2 style="margin-top: 1rem; text-align: center;">' + '저녁엔 꼭 먹도록 해요^^' + '</h2>');
+                $("#counter").html('<h2 style="margin-top: 1rem; text-align: center;">' + '오늘은 굶어요.^^' + '</h2>');
               } else {
                 $("#counter").html('<h2 style="margin-top: 1rem; text-align: center;">' + '무적권&nbsp;"' + wheel.segments[i] + '"&nbsp;갑시다 ㅇㅈ?' + '</h2>');
               }
