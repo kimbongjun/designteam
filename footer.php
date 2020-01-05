@@ -42,18 +42,7 @@
 </svg>
 			</div><!-- #transition_layer_inner -->
 		</div><!-- #transition_layer -->
-		</div><!-- #transition_container -->
-		<div class="music">
-		<?php
-$file = get_field('udtt_music','option');
-if( $file ):
-    // Extract variables.
-    $url = $file['url'];
-?>
-<?php endif; ?>
-		</div>
-
-
+		</div><!-- #transition_container -->		
 	<footer id="colophon" class="site-footer">
 		<div class="site-info">				
 			<div class="container">
