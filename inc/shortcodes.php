@@ -1,4 +1,5 @@
 <?php
+
 function roulette(){
     ob_start();
     ?>
@@ -7,11 +8,19 @@ function roulette(){
         <input type="submit" value="메뉴 추천하기">
     </form>
     <br/>    
-    <div id=venues style=float:left><ul/></div>
+    <div id=venues style=float:left>
+    <ul>
+        <!-- <li>
+            <input type="checkbox" name="allcheck" id="allcheck" class="allchecked">
+            <label for="allcheck">전체선택</label>
+        </li> -->
+    </ul>
+    </div>
     <div id="wheel">
        <canvas height="600" id="canvas" width="800"></canvas>
     </div>
     <div id="counter"></div>
+    <div id="result"></div>
     <script type=text/javascript>
     // Helpers
 	shuffle = function(o) {

@@ -164,6 +164,11 @@
                         padding-left: 26px;
                         font-weight: normal;
 
+                        &[for="venue-0"] {
+                            color: red;
+                            text-decoration: line-through;
+                        }
+
                         &:before,
                         &:after {
                             box-sizing: content-box;
@@ -246,6 +251,17 @@
                     // display: inline-block;
                     // vertical-align: middle;
                 }
+            }
+        }
+
+        #result {
+            margin-top: 10px;
+            text-align: center;
+
+            .reject {
+                background-color: $white;
+                border: 2px solid $color-primary;
+                padding: 10px 20px;
             }
         }
 
